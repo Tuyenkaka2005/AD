@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Status Indicator -->
+    <View
+        android:id="@+id/statusIndicator"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="12dp"
+        android:background="#4CAF50" />
+
+    <!-- Content -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Category Name -->
+        <TextView
+            android:id="@+id/tvCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🍔 Food &amp; Dining"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:paddingBottom="4dp" />
+
+        <!-- Budget Amount -->
+        <TextView
+            android:id="@+id/tvBudgetAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Budget: ₫5,000,000"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:paddingBottom="4dp" />
+
+        <!-- Spent Amount -->
+        <TextView
+            android:id="@+id/tvSpentAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spent: ₫3,500,000"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:paddingBottom="8dp" />
+
+        <!-- Progress Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="70"
+                android:progressTint="#4CAF50"
+                android:progressBackgroundTint="#E0E0E0" />
+
+            <TextView
+                android:id="@+id/tvPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="70%"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#666666"
+                android:paddingStart="8dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Arrow Icon -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="›"
+        android:textSize="24sp"
+        android:textColor="#CCCCCC"
+        android:layout_gravity="center_vertical"
+        android:paddingStart="8dp" />
+
+</LinearLayout>

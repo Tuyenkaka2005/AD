@@ -121,11 +121,6 @@ public class Category {
 
     @Override
     public String toString() {
-        return "Category{" +
-                "categoryId='" + categoryId + '\'' +
-                ", name='" + name + '\'' +
-                ", icon='" + icon + '\'' +
-                ", color='" + color + '\'' +
-                '}';
+        return name;
     }
 }
