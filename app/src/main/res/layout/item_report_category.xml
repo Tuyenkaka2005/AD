@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvCategoryIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="🍔" />
+
+    <TextView
+        android:id="@+id/tvCategoryName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tvCategoryAmount"
+        app:layout_constraintStart_toEndOf="@id/tvCategoryIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Category Name" />
+
+    <TextView
+        android:id="@+id/tvCategoryAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1,000,000 đ" />
+
+    <ProgressBar
+        android:id="@+id/progressBarCategory"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="8dp"
+        android:max="100"
+        app:layout_constraintEnd_toStartOf="@+id/tvCategoryPercentage"
+        app:layout_constraintStart_toStartOf="@id/tvCategoryName"
+        app:layout_constraintTop_toBottomOf="@id/tvCategoryName"
+        tools:progress="60" />
+
+    <TextView
+        android:id="@+id/tvCategoryPercentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/progressBarCategory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/progressBarCategory"
+        app:layout_constraintTop_toTopOf="@id/progressBarCategory"
+        tools:text="60.0%" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,19 @@
 package com.budgetwise.ad;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.budgetwise.ad.DatabaseContract;
 import com.budgetwise.ad.DatabaseContract.*;
-import com.budgetwise.ad.Category;
+// Lưu ý: Đảm bảo file CategoryReportItem nằm đúng package này hoặc .model
+// Nếu code báo đỏ dòng này, hãy trỏ chuột vào và nhấn Alt+Enter để import đúng.
+import com.budgetwise.ad.CategoryReportItem;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * SQLiteOpenHelper for managing local database.
@@ -59,25 +65,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "Upgrading database from v" + oldVersion + " to v" + newVersion);
-
-        // Handle migrations based on version
         if (oldVersion < 2) {
-            // Future migration: Add new columns or tables
-            // Example: db.execSQL("ALTER TABLE expenses ADD COLUMN new_field TEXT");
+            // Future migration code
         }
-
-        // For development, you can drop and recreate
-        // WARNING: This deletes all data! Only use during development.
-        /*
-        db.execSQL(NotificationEntry.SQL_DROP_TABLE);
-        db.execSQL(RecurringExpenseEntry.SQL_DROP_TABLE);
-        db.execSQL(BudgetEntry.SQL_DROP_TABLE);
-        db.execSQL(ExpenseEntry.SQL_DROP_TABLE);
-        db.execSQL(CategoryEntry.SQL_DROP_TABLE);
-        db.execSQL(UserEntry.SQL_DROP_TABLE);
-        db.execSQL(SyncEntry.SQL_DROP_TABLE);
-        onCreate(db);
-        */
     }
 
     @Override
@@ -111,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     CategoryEntry.COLUMN_UPDATED_AT +
                     ") VALUES (?, ?, ?, ?, 1, 1, ?, ?)";
 
-            db.execSQL(sql, new Object[] {
+            db.execSQL(sql, new Object[]{
                     cat.getCategoryId(),
                     cat.getName(),
                     cat.getIcon(),
@@ -120,8 +110,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     now
             });
         }
-
         Log.d(TAG, "Inserted " + defaults.length + " default categories");
+    }
+
+    /**
+     * Helper method to insert a new expense.
+     * Changed to PUBLIC so it can be used by the AddExpenseActivity later.
+     */
+    public void insertExpense(SQLiteDatabase db, String userId, String catId, String title, double amount, long date) {
+        ContentValues values = new ContentValues();
+        values.put(ExpenseEntry.COLUMN_EXPENSE_ID, UUID.randomUUID().toString());
+        values.put(ExpenseEntry.COLUMN_USER_ID, userId);
+        values.put(ExpenseEntry.COLUMN_CATEGORY_ID, catId);
+        values.put(ExpenseEntry.COLUMN_TITLE, title);
+        values.put(ExpenseEntry.COLUMN_AMOUNT, amount);
+        values.put(ExpenseEntry.COLUMN_DATE, date);
+        values.put(ExpenseEntry.COLUMN_IS_SYNCED, 0);
+        long now = System.currentTimeMillis();
+        values.put(ExpenseEntry.COLUMN_CREATED_AT, now);
+        values.put(ExpenseEntry.COLUMN_UPDATED_AT, now);
+
+        // If db is null (called from outside), get writable database
+        if (db == null) {
+            db = getWritableDatabase();
+            db.insert(ExpenseEntry.TABLE_NAME, null, values);
+            // Don't close db here if using singleton
+        } else {
+            db.insert(ExpenseEntry.TABLE_NAME, null, values);
+        }
     }
 
     /**
@@ -129,23 +145,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public void clearUserData(String userId) {
         SQLiteDatabase db = getWritableDatabase();
-
         db.beginTransaction();
         try {
-            // Delete in order to respect foreign keys
-            db.delete(NotificationEntry.TABLE_NAME,
-                    NotificationEntry.COLUMN_USER_ID + "=?", new String[]{userId});
-            db.delete(RecurringExpenseEntry.TABLE_NAME,
-                    RecurringExpenseEntry.COLUMN_USER_ID + "=?", new String[]{userId});
-            db.delete(BudgetEntry.TABLE_NAME,
-                    BudgetEntry.COLUMN_USER_ID + "=?", new String[]{userId});
-            db.delete(ExpenseEntry.TABLE_NAME,
-                    ExpenseEntry.COLUMN_USER_ID + "=?", new String[]{userId});
-            // Keep default categories, delete only custom ones
-            db.delete(CategoryEntry.TABLE_NAME,
-                    CategoryEntry.COLUMN_USER_ID + "=?", new String[]{userId});
-            db.delete(UserEntry.TABLE_NAME,
-                    UserEntry.COLUMN_USER_ID + "=?", new String[]{userId});
+            db.delete(NotificationEntry.TABLE_NAME, NotificationEntry.COLUMN_USER_ID + "=?", new String[]{userId});
+            db.delete(RecurringExpenseEntry.TABLE_NAME, RecurringExpenseEntry.COLUMN_USER_ID + "=?", new String[]{userId});
+            db.delete(BudgetEntry.TABLE_NAME, BudgetEntry.COLUMN_USER_ID + "=?", new String[]{userId});
+            db.delete(ExpenseEntry.TABLE_NAME, ExpenseEntry.COLUMN_USER_ID + "=?", new String[]{userId});
+            db.delete(CategoryEntry.TABLE_NAME, CategoryEntry.COLUMN_USER_ID + "=?", new String[]{userId});
+            db.delete(UserEntry.TABLE_NAME, UserEntry.COLUMN_USER_ID + "=?", new String[]{userId});
 
             db.setTransactionSuccessful();
             Log.d(TAG, "Cleared all data for user: " + userId);
@@ -159,15 +166,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public void clearAllData() {
         SQLiteDatabase db = getWritableDatabase();
-
         db.beginTransaction();
         try {
             db.delete(NotificationEntry.TABLE_NAME, null, null);
             db.delete(RecurringExpenseEntry.TABLE_NAME, null, null);
             db.delete(BudgetEntry.TABLE_NAME, null, null);
             db.delete(ExpenseEntry.TABLE_NAME, null, null);
-            db.delete(CategoryEntry.TABLE_NAME,
-                    CategoryEntry.COLUMN_IS_DEFAULT + "=0", null);
+            db.delete(CategoryEntry.TABLE_NAME, CategoryEntry.COLUMN_IS_DEFAULT + "=0", null);
             db.delete(UserEntry.TABLE_NAME, null, null);
             db.delete(SyncEntry.TABLE_NAME, null, null);
 
@@ -184,25 +189,106 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getDatabaseStats() {
         SQLiteDatabase db = getReadableDatabase();
         StringBuilder stats = new StringBuilder();
-
         String[] tables = {
-                UserEntry.TABLE_NAME,
-                CategoryEntry.TABLE_NAME,
-                ExpenseEntry.TABLE_NAME,
-                BudgetEntry.TABLE_NAME,
-                RecurringExpenseEntry.TABLE_NAME,
-                NotificationEntry.TABLE_NAME
+                UserEntry.TABLE_NAME, CategoryEntry.TABLE_NAME, ExpenseEntry.TABLE_NAME,
+                BudgetEntry.TABLE_NAME, RecurringExpenseEntry.TABLE_NAME, NotificationEntry.TABLE_NAME
         };
-
         for (String table : tables) {
-            android.database.Cursor cursor = db.rawQuery(
-                    "SELECT COUNT(*) FROM " + table, null);
+            android.database.Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + table, null);
             if (cursor.moveToFirst()) {
                 stats.append(table).append(": ").append(cursor.getInt(0)).append("\n");
             }
             cursor.close();
         }
-
         return stats.toString();
+    }
+
+    // ============================================================
+    // REPORTING SECTION (CHỨC NĂNG BÁO CÁO)
+    // ============================================================
+
+    /**
+     * Tính tổng chi tiêu của người dùng trong một khoảng thời gian.
+     */
+    public double getTotalExpenseForPeriod(String userId, long startDate, long endDate) {
+        double total = 0;
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "SELECT SUM(" + ExpenseEntry.COLUMN_AMOUNT + ") " +
+                "FROM " + ExpenseEntry.TABLE_NAME + " " +
+                "WHERE " + ExpenseEntry.COLUMN_USER_ID + " = ? " +
+                "AND " + ExpenseEntry.COLUMN_DATE + " >= ? " +
+                "AND " + ExpenseEntry.COLUMN_DATE + " <= ?";
+
+        String[] selectionArgs = new String[]{
+                userId, String.valueOf(startDate), String.valueOf(endDate)
+        };
+
+        android.database.Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(query, selectionArgs);
+            if (cursor.moveToFirst()) {
+                total = cursor.getDouble(0);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error calculating total expense", e);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return total;
+    }
+
+    /**
+     * Lấy danh sách báo cáo phân tích theo từng danh mục (Category).
+     * Đã sửa lỗi SQL alias.
+     */
+    public List<com.budgetwise.ad.CategoryReportItem> getCategoryReport(String userId, long startDate, long endDate) {
+        List<com.budgetwise.ad.CategoryReportItem> reportItems = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        String eTable = ExpenseEntry.TABLE_NAME;
+        String cTable = CategoryEntry.TABLE_NAME;
+
+        // Câu lệnh SQL ĐÃ SỬA: Thêm " AS e" và " AS c"
+        String query = "SELECT " +
+                "e." + ExpenseEntry.COLUMN_CATEGORY_ID + ", " +
+                "c." + CategoryEntry.COLUMN_NAME + ", " +
+                "c." + CategoryEntry.COLUMN_ICON + ", " +
+                "c." + CategoryEntry.COLUMN_COLOR + ", " +
+                "SUM(e." + ExpenseEntry.COLUMN_AMOUNT + ") as total_amount " +
+                "FROM " + eTable + " AS e " +  // <--- QUAN TRỌNG: Định nghĩa alias e
+                "JOIN " + cTable + " AS c " +  // <--- QUAN TRỌNG: Định nghĩa alias c
+                "ON e." + ExpenseEntry.COLUMN_CATEGORY_ID + " = c." + CategoryEntry.COLUMN_CATEGORY_ID + " " +
+                "WHERE e." + ExpenseEntry.COLUMN_USER_ID + " = ? " +
+                "AND e." + ExpenseEntry.COLUMN_DATE + " >= ? " +
+                "AND e." + ExpenseEntry.COLUMN_DATE + " <= ? " +
+                "GROUP BY e." + ExpenseEntry.COLUMN_CATEGORY_ID + " " +
+                "ORDER BY total_amount DESC";
+
+        String[] selectionArgs = new String[]{
+                userId, String.valueOf(startDate), String.valueOf(endDate)
+        };
+
+        android.database.Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(query, selectionArgs);
+            if (cursor.moveToFirst()) {
+                do {
+                    String catId = cursor.getString(cursor.getColumnIndexOrThrow(ExpenseEntry.COLUMN_CATEGORY_ID));
+                    String catName = cursor.getString(cursor.getColumnIndexOrThrow(CategoryEntry.COLUMN_NAME));
+                    String catIcon = cursor.getString(cursor.getColumnIndexOrThrow(CategoryEntry.COLUMN_ICON));
+                    String catColor = cursor.getString(cursor.getColumnIndexOrThrow(CategoryEntry.COLUMN_COLOR));
+                    double amount = cursor.getDouble(cursor.getColumnIndexOrThrow("total_amount"));
+
+                    com.budgetwise.ad.CategoryReportItem item = new com.budgetwise.ad.CategoryReportItem(catId, catName, catIcon, catColor, amount);
+                    reportItems.add(item);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "Error fetching category report", ex);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return reportItems;
     }
 }
