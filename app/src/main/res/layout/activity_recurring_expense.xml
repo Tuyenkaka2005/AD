@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F5F7FA">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thêm chi phí định kỳ"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#2E3A59"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/etRecurringTitle"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/edittext_rounded"
+        android:hint="Tên chi phí (vd: Tiền nhà)" />
+
+    <EditText
+        android:id="@+id/etRecurringAmount"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edittext_rounded"
+        android:hint="Số tiền"
+        android:inputType="numberDecimal" />
+
+    <Spinner
+        android:id="@+id/spinnerRecurringCategory"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="12dp" />
+
+    <Spinner
+        android:id="@+id/spinnerRecurringInterval"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="12dp"
+        android:entries="@array/recurring_intervals" />
+
+    <EditText
+        android:id="@+id/etRecurringNote"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edittext_rounded"
+        android:hint="Ghi chú (không bắt buộc)" />
+
+    <Button
+        android:id="@+id/btnAddRecurring"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thêm chi phí định kỳ"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#4CAF50"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Danh sách định kỳ"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:textColor="#2E3A59"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecurringExpenses"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"/>
+</LinearLayout>
