@@ -1,3 +1,4 @@
+// Update MainActivity.java to integrate (uncomment and adjust)
 package com.budgetwise.ad;
 
 import android.content.Intent;
@@ -24,25 +25,31 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Check if user is logged in
+        if (UserSession.getCurrentUserId(this) == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         initializeUI();
         OverviewHelper.generateMissedRecurringExpenses(this);
     }
 
     private void initializeUI() {
-
         // Expense Tracking
-//        findViewById(R.id.cardExpenseTracking).setOnClickListener(v ->
-//                startActivity(new Intent(this, ExpenseActivity.class)));
+        findViewById(R.id.cardExpenseTracking).setOnClickListener(v ->
+                startActivity(new Intent(this, ExpenseListActivity.class)));
 
         // Budget Setup
         findViewById(R.id.cardBudgetSetup).setOnClickListener(v ->
                 startActivity(new Intent(this, BudgetActivity.class)));
 
-//        // Expense Overview
+        // Expense Overview
         findViewById(R.id.cardExpenseOverview).setOnClickListener(v ->
                 startActivity(new Intent(this, OverviewActivity.class)));
 
-//        // Recurring Expenses
+        // Recurring Expenses
         findViewById(R.id.cardRecurringExpenses).setOnClickListener(v ->
                 startActivity(new Intent(this, RecurringExpenseActivity.class)));
 
