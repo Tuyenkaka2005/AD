@@ -32,6 +32,13 @@
             android:label="Budget Management"
             android:parentActivityName=".MainActivity"
             android:exported="false" />
+        <activity
+            android:name=".OverviewActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".RecurringExpenseActivity"
+            android:exported="false" />
 
     </application>
 
