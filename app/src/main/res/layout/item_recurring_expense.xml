@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/tvRecurringTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tiền nhà trọ"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#2E3A59"/>
+
+        <TextView
+            android:id="@+id/tvRecurringAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.500.000 đ"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#E74C3C"
+            android:layout_marginTop="4dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tvRecurringCategory"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Nhà ở"/>
+
+            <TextView
+                android:id="@+id/tvRecurringInterval"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mỗi monthly"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvNextRun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lần tới: 01/04/2025"
+            android:textColor="#7F8C8D"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

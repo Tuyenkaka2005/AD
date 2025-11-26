@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         initializeUI();
+        OverviewHelper.generateMissedRecurringExpenses(this);
     }
 
     private void initializeUI() {
@@ -38,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, BudgetActivity.class)));
 
 //        // Expense Overview
-//        findViewById(R.id.cardExpenseOverview).setOnClickListener(v ->
-//                startActivity(new Intent(this, OverviewActivity.class)));
+        findViewById(R.id.cardExpenseOverview).setOnClickListener(v ->
+                startActivity(new Intent(this, OverviewActivity.class)));
 
 //        // Recurring Expenses
-//        findViewById(R.id.cardRecurringExpenses).setOnClickListener(v ->
-//                startActivity(new Intent(this, RecurringExpenseActivity.class)));
+        findViewById(R.id.cardRecurringExpenses).setOnClickListener(v ->
+                startActivity(new Intent(this, RecurringExpenseActivity.class)));
 
         // Expense Report
 //        findViewById(R.id.cardExpenseReport).setOnClickListener(v ->

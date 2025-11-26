@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AD</string>
+    <string-array name="recurring_intervals">
+        <item>Monthly</item>
+        <item>Weekly</item>
+        <item>Every 2 weeks</item>
+        <item>Yearly</item>
+    </string-array>
 </resources>
