@@ -39,21 +39,12 @@
         <activity
             android:name=".RecurringExpenseActivity"
             android:exported="false" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".ExpenseListActivity" />
+        <activity android:name=".ExpenseActivity" />
 
     </application>
 
 </manifest>
 
-    <!--
-    IMPORTANT NOTES:
-    1. For Android 13+ (API 33+), you need to request POST_NOTIFICATIONS permission at runtime
-    2. Add this code to your MainActivity or BudgetActivity onCreate():
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
-        }
-    }
-    -->

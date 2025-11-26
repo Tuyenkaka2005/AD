@@ -1,8 +1,9 @@
+<!-- res/values-night/themes.xml -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-
-    <style name="Theme.BudgetWise" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorOnPrimary">@color/white</item>
+    <style name="Theme.BudgetWise" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#66BB6A</item>
+        <item name="colorPrimaryVariant">#57A05A</item>
+        <item name="android:statusBarColor">#1B5E20</item>
+        <item name="android:windowBackground">#121212</item>
     </style>
-
 </resources>
