@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(new Intent(this, ExpenseActivity.class)));
 
         // Budget Setup
-        findViewById(R.id.cardBudgetSetup).setOnClickListener(v ->
-                startActivity(new Intent(this, BudgetActivity.class)));
+ //       findViewById(R.id.cardBudgetSetup).setOnClickListener(v ->
+  //              startActivity(new Intent(this, BudgetActivity.class)));
 
 //        // Expense Overview
 //        findViewById(R.id.cardExpenseOverview).setOnClickListener(v ->
@@ -46,11 +46,25 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(new Intent(this, RecurringExpenseActivity.class)));
 
         // Expense Report
-//        findViewById(R.id.cardExpenseReport).setOnClickListener(v ->
-//                startActivity(new Intent(this, ReportActivity.class)));
+        View expenseReportCard = findViewById(R.id.cardExpenseReport);
+        if (expenseReportCard != null) {
+            android.widget.TextView featureTitle = expenseReportCard.findViewById(R.id.featureTitle);
+            if (featureTitle != null) {
+                featureTitle.setText("Báo cáo chi phí");
+            }
+            expenseReportCard.setOnClickListener(v ->
+                    startActivity(new Intent(this, ReportActivity.class)));
+        }
 
-//        // Search & Filter
-//        findViewById(R.id.cardSearchFilter).setOnClickListener(v ->
-//                startActivity(new Intent(this, SearchFilterActivity.class)));
+        // Search & Filter
+        View searchFilterCard = findViewById(R.id.cardSearchFilter);
+        if (searchFilterCard != null) {
+            android.widget.TextView featureTitle = searchFilterCard.findViewById(R.id.featureTitle);
+            if (featureTitle != null) {
+                featureTitle.setText("Tìm kiếm & Lọc Chi Phí");
+            }
+            searchFilterCard.setOnClickListener(v ->
+                    startActivity(new Intent(this, SearchFilterActivity.class)));
+        }
     }
 }

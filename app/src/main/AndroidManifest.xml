@@ -40,6 +40,14 @@
             android:name=".RecurringExpenseActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".SearchFilterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ReportActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
